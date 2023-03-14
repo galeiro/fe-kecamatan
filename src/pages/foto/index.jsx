@@ -4,8 +4,8 @@ import { Dialog, Transition } from "@headlessui/react";
 import React from "react";
 import "swiper/css";
 import { getApi } from "../../API/restApi";
-import galeriNotFound from "../../assets/Icon/galery not found.png";
-
+import Lottie from "lottie-react";
+import NotFound from "../../assets/json/93134-not-found.json";
 export default function Foto() {
   const [dataGaleri, setDataGaleri] = React.useState([]);
   const [loadGaleri, setLoadGaleri] = React.useState(true);
@@ -47,8 +47,9 @@ export default function Foto() {
                 dataGaleri.map((i, key) => <CardFoto key={key} data={i} />)
               ) : (
                 <>
-                  <div className="relative flex justify-center items-center py-20">
-                    <img src={galeriNotFound} className="h-[200px]" alt="" />
+                  <div className="flex flex-col justify-center items-center">
+                    <Lottie animationData={NotFound} />
+                    <h1 className="font-bold">Foto Tidak Tersedia</h1>
                   </div>
                 </>
               )

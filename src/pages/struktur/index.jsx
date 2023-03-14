@@ -1,46 +1,10 @@
 import React from "react";
 import SO from "../../assets/images/struktur.png";
-import berita1 from "../../assets/images/save-rohingya.jpg";
-import berita2 from "../../assets/images/anies.jpeg";
-import berita3 from "../../assets/images/jakarta.jpeg";
-import berita4 from "../../assets/images/suami.jpeg";
 import { getApi } from "../../API/restApi";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 
 export default function Struktur() {
-  const dataBerita = [
-    {
-      id: 1,
-      title: "Solidaritas Tanpa Batas Untuk Rohingnya",
-      cover: berita1,
-      date: "24 Desember 2022",
-      vilage: "Desa Singasari",
-    },
-    {
-      id: 2,
-      title:
-        "Viral Kuda Delman Anies Mundur-mundur Menuju Deklarasi, Ini Kata PKS",
-      cover: berita2,
-      date: "24 Februari 2023",
-      vilage: "Desa Singasari",
-    },
-    {
-      id: 3,
-      title:
-        "Banjir Jakarta 24 Februari 2023: Titik Lokasi hingga Kondisi Terkini",
-      cover: berita3,
-      date: "19 Februari 2023",
-      vilage: "Desa Cibodas",
-    },
-    {
-      id: 4,
-      title: "Viral Suami Lempar Istri ke Laut dari Kapal Merak-Bakauheni",
-      cover: berita4,
-      date: "1 Januari 2023",
-      vilage: "Desa Cibodas",
-    },
-  ];
   const data = [
     {
       id: 1,
@@ -218,30 +182,32 @@ export default function Struktur() {
                 </li>
               </ol>
             </div>
-            <div className="right 2xl:w-1/3 w-1/2 bg-white lg:flex hidden flex-col px-10 py-8 rounded-[20px] gap-y-5">
-              <h1 className="font-bold text-xl">Berita Terbaru</h1>
-              {!loadBerita ? (
-                berita
-                  .slice(0, 4)
-                  .map((i, key) =>
-                    key == 0 ? (
-                      <TopCard key={key} i={i} />
-                    ) : (
-                      <MiniCard key={key} i={i} />
+            {berita.length != 0 && (
+              <div className="right 2xl:w-1/3 w-1/2 bg-white lg:flex hidden flex-col px-10 py-8 rounded-[20px] gap-y-5">
+                <h1 className="font-bold text-xl">Berita Terbaru</h1>
+                {!loadBerita ? (
+                  berita
+                    .slice(0, 4)
+                    .map((i, key) =>
+                      key == 0 ? (
+                        <TopCard key={key} i={i} />
+                      ) : (
+                        <MiniCard key={key} i={i} />
+                      )
                     )
-                  )
-              ) : (
-                <div className="right  bg-white lg:flex hidden flex-col  rounded-[20px] gap-y-5">
-                  <div className="card-top flex flex-col mt-5 gap-y-2 animate-pulse">
-                    <div className="h-[300px] rounded-[15px] bg-gray-300"></div>
-                    <div className="text-xs font-bold h-4 w-1/2 bg-gray-500 rounded-full"></div>
-                    <div className="text-xs font-bold h-4 w-1/4 bg-gray-500 rounded-full"></div>
+                ) : (
+                  <div className="right  bg-white lg:flex hidden flex-col  rounded-[20px] gap-y-5">
+                    <div className="card-top flex flex-col mt-5 gap-y-2 animate-pulse">
+                      <div className="h-[300px] rounded-[15px] bg-gray-300"></div>
+                      <div className="text-xs font-bold h-4 w-1/2 bg-gray-500 rounded-full"></div>
+                      <div className="text-xs font-bold h-4 w-1/4 bg-gray-500 rounded-full"></div>
+                    </div>
+                    <BottomCardLoader />
+                    <BottomCardLoader />
                   </div>
-                  <BottomCardLoader />
-                  <BottomCardLoader />
-                </div>
-              )}
-            </div>
+                )}
+              </div>
+            )}
           </div>
           {/* Bottom */}
         </div>
