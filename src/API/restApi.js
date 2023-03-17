@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:8000/api/";
+const BASE_URL = "https://kec.giriwangi.com/api/";
 
 function getApi(path_url) {
   // console.log(BASE_URL + path_url);
@@ -22,4 +22,24 @@ function getApi(path_url) {
   });
 }
 
-export { getApi };
+function putViwes(path_url) {
+  // console.log(BASE_URL + path_url);
+  return new Promise((resolve, reject) => {
+    var config = {
+      method: "POST",
+      url: BASE_URL + path_url,
+      headers: {
+        //'Authorization': 'Bearer ' + token
+      },
+    };
+    axios(config)
+      .then(function (response) {
+        resolve(response);
+      })
+      .catch(function (error) {
+        reject(error);
+      });
+  });
+}
+
+export { getApi, putViwes };
