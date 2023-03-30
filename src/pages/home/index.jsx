@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import Lottie from "lottie-react";
 import NotFound from "../../assets/json/93134-not-found.json";
 import ErrorIndicator from "../../assets/json/98642-error-404.json";
+import Potensi from "./component/Potensi";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -21,17 +22,6 @@ export default function Home() {
     try {
       await getApi("penduduk/total").then((res) => {
         setPenduduk(res.data.data);
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const [bumdes, setBumdes] = React.useState();
-  const getBumdes = async () => {
-    try {
-      await getApi("bumd/total").then((res) => {
-        setBumdes(res.data.data);
       });
     } catch (error) {
       console.log(error);
@@ -78,8 +68,8 @@ export default function Home() {
     },
     {
       id: 4,
-      count: bumdes,
-      title: "Jumlah Bumdes",
+      count: 158.9,
+      title: "Luas Wilayah",
     },
   ];
 
@@ -141,7 +131,6 @@ export default function Home() {
     getBerita();
     getDesa();
     getPenduduk();
-    getBumdes();
     getAsn();
   }, []);
 
@@ -149,7 +138,7 @@ export default function Home() {
     <>
       <div className=" lg:pt-[100px] pt-[80px] w-full">
         <Slider />
-        {/* about for dekstop */}
+        {/* 
         <div className="mt-32 lg:flex hidden flex-row justify-between items-center 2xl:px-16 lg:px-10 px-8 mb-20 gap-x-96">
           <div className="left flex flex-col gap-y-20 2xl:w-1/3 lg:w-11/12">
             <h1 className="font-bold 2xl:text-6xl lg:text-5xl 2xl:w-3/4">
@@ -168,8 +157,7 @@ export default function Home() {
             <img src={Logoutama} draggable="false" className="w-full" alt="" />
           </div>
         </div>
-        {/* about for dekstop */}
-        {/* about for mobile */}
+      
         <div className="mt-20 lg:hidden flex flex-col justify-start items-start px-8">
           <div className="top">
             <h1 className="font-bold text-4xl w-3/4">
@@ -184,18 +172,24 @@ export default function Home() {
               necessitatibus optio consequuntur maiores non, repudiandae esse
               excepturi, sit, voluptatibus sint modi quod rem.
             </p>
-          </div>
-        </div>
-        {/* about for mobile */}
+          </divF>
+        </div> 
+
 
         {/* jumlah for dekstop */}
-        <div className="mt-10 mb-10 px-16 lg:flex hidden justify-center">
-          <div className=" rounded-xl bg-white flex lg:px-5 lg:py-5 ">
+        <div className="mt-20 mb-10 px-24 lg:flex hidden justify-center">
+          {/* <div className=" rounded-xl bg-white flex lg:px-5 lg:py-5 ">
+            {data.map((i, key) => (
+              <CardInfo key={key} index={key} data={i} />
+            ))}
+          </div> */}
+          <div className="grid grid-cols-4 gap-x-5 w-full">
             {data.map((i, key) => (
               <CardInfo key={key} index={key} data={i} />
             ))}
           </div>
         </div>
+
         {/* jumlah for dekstop */}
         {/* jumlah for mobile */}
         <div className="mt-10 mb-10 px-8 lg:hidden flex justify-center">
@@ -206,7 +200,9 @@ export default function Home() {
           </div>
         </div>
         {/* jumlah for mobile */}
-
+        {/* Potensi Desa */}
+        <Potensi />
+        {/* Potensi Desa */}
         {/* program */}
         <div className="mt-28 mb-10 2xl:px-16 lg:px-10 px-8 flex flex-col items-center justify-center">
           <h1 className="text-4xl font-bold capitalize underline decoration-[#3C903C]">
@@ -358,18 +354,22 @@ function CardInfo({ index, data }) {
       <div
         onMouseOver={handleMouseOver}
         onMouseOut={handleMouseOut}
-        className={`penduduk flex flex-col  items-center lg:gap-y-5 gap-y-1 lg:px-12 px-5  lg:py-5 py-2 transition-all cursor-default ${
-          isHovering && "-translate-y-1 -translate-x-1 shadow-xl transition-all"
+        className={`penduduk flex flex-col  items-center lg:gap-y-5 gap-y-1 lg:px-12 px-5  lg:py-16 py-10 transition-all cursor-default rounded-2xl border-2 ${
+          isHovering &&
+          "-translate-y-1 -translate-x-1 shadow-xl transition-all bg-white border-0"
           // eslint-disable-next-line eqeqeq
-        } ${index != 0 && !isHovering ? "border-l-2" : "rounded-xl"}`}
+        } `}
       >
-        <CountUp
-          className="font-bold lg:text-2xl text-base"
-          duration={5}
-          decimal={data.count}
-          end={data.count}
-        />
-        <p className="lg:text-xl text-sm">{data.title}</p>
+        <div className="flex gap-x-3">
+          <CountUp
+            className="font-bold text-4xl text-[#007100]"
+            duration={5}
+            decimal={data.count}
+            end={data.count}
+          />
+          {data.title == "Luas Wilayah" && "KM"}
+        </div>
+        <p className="lg:text-2xl text-lg">{data.title}</p>
       </div>
     </>
   );
@@ -389,12 +389,15 @@ function CardInfoMobile({ data }) {
             : "rounded-br-xl"
         }`}
       >
-        <CountUp
-          className="font-bold text-2xl "
-          duration={5}
-          decimal={data.count}
-          end={data.count}
-        />
+        <div className="flex gap-x-3">
+          <CountUp
+            className="font-bold text-2xl "
+            duration={5}
+            decimal={data.count}
+            end={data.count}
+          />
+          {data.title == "Luas Wilayah" && "KM"}
+        </div>
         <p className="text-xl ">{data.title}</p>
       </div>
     </>
@@ -494,3 +497,4 @@ function CardBerita({ i }) {
     </>
   );
 }
+
