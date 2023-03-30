@@ -14,6 +14,7 @@ import NotFound from "../../assets/json/93134-not-found.json";
 import ErrorIndicator from "../../assets/json/98642-error-404.json";
 import CustomButton from "./component/customButton";
 import Agenda from "../agenda";
+import Potensi from "./component/Potensi";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -503,118 +504,7 @@ function CardBerita({ i }) {
   );
 }
 
-function Potensi() {
-  const [potensi, setPotensi] = React.useState([]);
-  const [loadPotensi, setLoadPotensi] = React.useState(true);
-  const [potensiError, setPotensiError] = React.useState(false);
-  const [search, setSearch] = React.useState("");
-  const loader = [1, 2, 3, 4, 5, 6];
 
-  const getPotensi = async () => {
-    try {
-      await getApi(
-        `potensi-desa?limit=9&${search != "" && `key=${search}`}`
-      ).then((res) => {
-        setPotensi(res.data.data);
-        setLoadPotensi(false);
-      });
-    } catch (error) {
-      console.log(error);
-      setLoadPotensi(false);
-      setPotensiError(true);
-    }
-  };
-
-  React.useEffect(() => {
-    getPotensi();
-  }, [search]);
-  return (
-    <>
-      <div className="flex flex-col justify-center items-center py-20  mb-20 bg-[#3C903C] lg:px-20 px-8">
-        <div className="flex lg:flex-row flex-col lg:gap-y-0 gap-y-5 justify-between w-full items-end">
-          <div className="left title flex flex-col gap-y-5 lg:w-1/3 text-white">
-            <div className="h1">
-              <div className="  capitalize text-3xl font-bold">
-                Wisata Jonggol
-              </div>
-              <div className={`flex  my-2 h-0.5 w-44 bg-white`}></div>
-            </div>
-            <p>
-              Potensi desa Kecamatan Jonggol sangat besar, terutama dalam bidang
-              pertanian dan pariwisata. Desa-desa di Jonggol memiliki lahan yang
-              subur dan cocok untuk bercocok tanam, seperti padi, sayuran, dan
-              buah-buahan. Selain itu, desa-desa di Jonggol juga memiliki
-              keindahan alam yang memikat, seperti air terjun, danau, dan
-              bukit-bukit yang hijau, yang dapat menjadi destinasi wisata yang
-              menarik bagi wisatawan lokal maupun mancanegara.
-            </p>
-          </div>
-          <div className="right relative lg:w-auto w-full">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="absolute top-0 bottom-0 w-6 h-6 my-auto text-gray-400 left-3"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
-            <input
-              onChange={(e) => {
-                setSearch(e.target.value);
-              }}
-              type="text"
-              className="block w-full placeholder:text-gray-400 text-gray-400 pl-12 px-4 py-3 bg-white border rounded-xl focus:border-white focus:ring-white focus:outline-none focus:ring focus:ring-opacity-40"
-              placeholder="Search..."
-            />
-          </div>
-        </div>
-        <div
-          className={`mt-20  gap-10 w-full ${
-            loadPotensi
-              ? "grid lg:grid-cols-3 grid-cols-1"
-              : potensi.length == 0 || potensiError
-              ? ""
-              : "grid lg:grid-cols-3 grid-cols-1"
-          }`}
-        >
-          {!loadPotensi ? (
-            potensi.length != 0 ? (
-              potensi.map((i, key) => (
-                <>
-                  <CardPotensi key={key} data={i} />
-                </>
-              ))
-            ) : potensiError ? (
-              <>
-                <div className="flex flex-col justify-center items-center">
-                  <Lottie animationData={ErrorIndicator} />
-                  <h1 className="font-bold">Terjadi Kesalahan</h1>
-                </div>
-              </>
-            ) : (
-              <>
-                <div className="flex flex-col justify-center items-center">
-                  <Lottie animationData={NotFound} />
-                  <h1 className="font-bold text-white">
-                    Potensi Tidak Tersedia
-                  </h1>
-                </div>
-              </>
-            )
-          ) : (
-            loader.map((i, key) => <CardPotensiLoading />)
-          )}
-        </div>
-      </div>
-    </>
-  );
-}
 
 function CardPotensi({ data }) {
   return (
