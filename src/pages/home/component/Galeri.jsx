@@ -142,7 +142,7 @@ function CardFoto({ i }) {
             setOpen(true);
           }
         }}
-        className="lg:h-96 2xl:min-h-[30rem]  h-96 rounded-2xl w-full bg-cover bg-center shadow-2xl"
+        className="lg:h-96 2xl:min-h-[30rem] m-7 h-96 rounded-2xl w-full bg-cover bg-center shadow-2xl transition-all ease-in-out hover:scale-105 cursor-pointer"
         style={{
           backgroundImage: `url(${
             i.cover != null ? i.cover.thumbnail : NoImage
