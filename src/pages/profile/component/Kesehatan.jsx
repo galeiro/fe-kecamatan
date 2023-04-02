@@ -6,9 +6,10 @@ import Lottie from "lottie-react";
 import NotFound from "../../../assets/json/93134-not-found.json";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Scrollbar, Mousewheel } from "swiper";
-import { Link21, Map } from "iconsax-react";
+import { Call, Link21, Map } from "iconsax-react";
 import { getApi } from "../../../API/restApi";
 import ErrorIndicator from "../../../assets/json/98642-error-404.json";
+import AnimatedButton from "../../../component/animatedButton";
 
 export default function Kesehatan() {
   const [kesehatan, setKesehatan] = React.useState({
@@ -34,85 +35,109 @@ export default function Kesehatan() {
   return (
     <>
       <div className="w-full mt-10">
-        <Swiper
-          direction={"vertical"}
-          slidesPerView={"auto"}
-          freeMode={true}
-          mousewheel={true}
-          modules={[FreeMode, Scrollbar, Mousewheel]}
-          className="mySwiper  lg:h-[80vh] h-[130vh]"
+        <div
+          className={` gap-5 mt-10 ${
+            kesehatan.loading == true
+              ? "grid lg:grid-cols-4 grid-cols-1"
+              : kesehatan.data.length == 0 || kesehatan.error == true
+              ? ""
+              : "grid lg:grid-cols-4 grid-cols-1"
+          }`}
         >
           {kesehatan.loading != true ? (
             kesehatan.data.length != 0 ? (
-              kesehatan.data.map((i, key) => (
-                <SwiperSlide key={key}>
-                  <Isi i={i} />
-                </SwiperSlide>
-              ))
+              kesehatan.data.map((i, key) => <Card i={i} key={key} />)
             ) : kesehatan.error ? (
               <>
-                <SwiperSlide>
-                  <div className="flex flex-col justify-center items-center">
-                    <Lottie animationData={ErrorIndicator} />
-                    <h1 className="font-bold">Terjadi Kesalahan</h1>
-                  </div>
-                </SwiperSlide>
+                <div className="flex flex-col justify-center items-center">
+                  <Lottie animationData={ErrorIndicator} />
+                  <h1 className="font-bold">Terjadi Kesalahan</h1>
+                </div>
               </>
             ) : (
               <>
-                <SwiperSlide>
-                  <div className="flex flex-col justify-center items-center">
-                    <Lottie animationData={NotFound} />
-                    <h1 className="font-bold">Kesehatan Tidak Tersedia</h1>
-                  </div>
-                </SwiperSlide>
+                <div className="flex flex-col justify-center items-center">
+                  <Lottie animationData={NotFound} />
+                  <h1 className="font-bold">Kesehatan Tidak Tersedia</h1>
+                </div>
               </>
             )
           ) : (
-            <></>
+            [1, 2, 3, 4, 5, 6, 7, 8].map((i, key) => <CardLoading />)
           )}
-        </Swiper>
+        </div>
       </div>
     </>
   );
 }
 
-function Isi({ i }) {
+function Card({ i }) {
+  const [isHovering, setIsHovering] = React.useState(false);
+  const handleMouseOver = () => {
+    setIsHovering(true);
+  };
+
+  const handleMouseOut = () => {
+    setIsHovering(false);
+  };
+
+  const [isHovering2, setIsHovering2] = React.useState(false);
+  const handleMouseOver2 = () => {
+    setIsHovering(true);
+  };
+
+  const handleMouseOut2 = () => {
+    setIsHovering2(false);
+  };
   return (
     <>
-      <div className="flex flex-col  items-start">
-        <h1 className="text-3xl font-semibold text-[#3C903C]">
-          Rumah sakit (RS)
-        </h1>
-        <div className="border-b-2 border-[#3C903C] w-full pt-2"></div>
-        <div className="flex lg:flex-row flex-col justify-between w-full gap-x-20 mt-10">
-          <div className="left lg:mb-0 mb-5 lg:w-1/3">
-            <div
-              style={{ backgroundImage: `url(${i.thumbnail})` }}
-              className="foto h-[50vh] bg-cover bg-center  rounded-xl flex"
-            ></div>
+      <div
+        onMouseEnter={handleMouseOver}
+        onMouseLeave={handleMouseOut}
+        className="card flex flex-col  gap-y-5 bg-bgHijauPrimary  w-full  pb-10 rounded-[20px] cursor-pointer transition-all"
+      >
+        <div
+          style={{ backgroundImage: `url(${i.thumbnail})` }}
+          className="w-full h-[200px] bg-cover rounded-t-3xl bg-center"
+        ></div>
+        <div className=" px-5 flex flex-col gap-y-5">
+          <h1 className="text-white font-bold">{i.nama}</h1>
+          <p className="text-white font-medium">{i.deskripsi}</p>
+          <div className="flex gap-x-10 justify-center">
+            <a
+              href={`tel:${i.kontak}`}
+              className="flex gap-x-3 px-4 py-3 font-bold bg-white rounded-xl text-hijauPrimary"
+            >
+              <Call /> Call Center
+            </a>
+            <a
+              href={`${i.maps}`}
+              className="flex gap-x-3 px-8 font-bold py-3 bg-white rounded-xl text-hijauPrimary"
+            >
+              <Map /> Map
+            </a>
           </div>
-          <div className="right lg:w-[60%]">
-            <h1 className="font-bold text-4xl text-[#3C903C]">{i.nama}</h1>
-            <p className="pt-10 text-lg">{i.deskripsi}</p>
-            <div className="flex gap-5 mt-10">
-              <div className="view text-white font-semibold px-10 py-4 rounded-xl bg-[#3C903C]">
-                Kontak
-              </div>
-              <div
-                onClick={() => {
-                  window.open(`${i.maps}`);
-                }}
-                className="lg:px-12 px-5 flex cursor-pointer gap-x-4 py-4 border-2 border-[#3C903C] rounded-xl text-[#3C903C]"
-              >
-                <Map />
-                Maps
-              </div>
-              <div className="flex gap-x-2 px-5 py-4 border-2 border-[#3C903C] rounded-xl text-[#3C903C]">
-                <Link21 /> {i.web}
-              </div>
-            </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+function CardLoading(params) {
+  return (
+    <>
+      <div className="bg-gray-100 w-full h-[500px] rounded-2xl border-blue-300 animate-pulse">
+        <div className="w-full h-1/2 bg-cover rounded-t-2xl bg-center bg-gray-300"></div>
+        <div className="pl-2 pr-10 py-5 space-y-16">
+          <div className="space-y-2">
+            <div className="text-xs font-bold h-4  bg-gray-300 rounded-full"></div>
+            <div className="text-xs font-bold h-4 w-1/4 bg-gray-300 rounded-full"></div>
+            <div className="text-xs font-bold h-4  bg-gray-300 rounded-full"></div>
+            <div className="text-xs font-bold h-4 w-1/4 bg-gray-300 rounded-full"></div>
+            <div className="text-xs font-bold h-4  bg-gray-300 rounded-full"></div>
+            <div className="text-xs font-bold h-4 w-1/4 bg-gray-300 rounded-full"></div>
           </div>
+          <div className="text-xs font-bold h-4 w-1/4 bg-gray-300 rounded-full"></div>
         </div>
       </div>
     </>

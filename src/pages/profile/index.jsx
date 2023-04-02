@@ -13,6 +13,8 @@ import NotFound from "../../assets/json/93134-not-found.json";
 import { useNavigate } from "react-router-dom";
 import ErrorIndicator from "../../assets/json/98642-error-404.json";
 import { ArrowRight2 } from "iconsax-react";
+import UnderlineButton from "../home/component/underlineButton";
+import AnimatedButton from "../../component/animatedButton";
 
 export default function Profile() {
   const [penduduk, setPenduduk] = React.useState();
@@ -84,6 +86,8 @@ export default function Profile() {
       desc: "Kecamatan Jonggol memiliki beberapa TK yang berkualitas dan berkomitmen untuk memberikan pendidikan terbaik bagi siswanya",
       swasta: 10,
       negri: 5,
+      logoPendidikan:
+        "https://blog.pengajartekno.com/wp-content/uploads/2022/11/logo-tk-png.png",
     },
     {
       id: 2,
@@ -92,6 +96,8 @@ export default function Profile() {
       desc: "Kecamatan Jonggol memiliki beberapa SD yang berkualitas dan berkomitmen untuk memberikan pendidikan terbaik bagi siswanya",
       swasta: 10,
       negri: 5,
+      logoPendidikan:
+        "https://siap-sekolah.s3.amazonaws.com/17724/files/2014/03/logo-sd1.png",
     },
     {
       id: 3,
@@ -100,6 +106,8 @@ export default function Profile() {
       desc: "Kecamatan Jonggol memiliki beberapa SMP yang berkualitas dan berkomitmen untuk memberikan pendidikan terbaik bagi siswanya",
       swasta: 10,
       negri: 5,
+      logoPendidikan:
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjIvTdX754HDd_esf3o6e4wbFThVMz3IdHT7mVzG75sdiwueT7XUOps-_s5dRkN8Q73uLStyjrztY3EYWT9K8ORhROkXSd7kQz4RLzpofDzbPI3B_0Js7608kMaQ3GI5Ff2WpCk93qlSh9ei4ps42ZIkX2oq0zj6ldPIWkg7CIKTxbpDqGoK8UJURac/s1049/logo-smp.png",
     },
     {
       id: 4,
@@ -108,6 +116,8 @@ export default function Profile() {
       desc: "Kecamatan Jonggol memiliki beberapa SMA yang berkualitas dan berkomitmen untuk memberikan pendidikan terbaik bagi siswanya",
       swasta: 10,
       negri: 5,
+      logoPendidikan:
+        "https://sman1sukaresmi.sch.id/media_library/posts/post-image-1601167638481.png",
     },
     {
       id: 5,
@@ -116,6 +126,8 @@ export default function Profile() {
       desc: "Kecamatan Jonggol memiliki beberapa SMK yang berkualitas dan berkomitmen untuk memberikan pendidikan terbaik bagi siswanya",
       swasta: 10,
       negri: 5,
+      logoPendidikan:
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiro7tiXSyLj1CLoOyVMSKZl_IKv5OXGFHHorA-42WoEaJjdKkVjH5pGkhB8sQOzHl0aMBvtHHuQ6UPoJ2jOjpLvhPzOyljOVnYZFvTjZWnewvppOxyRwQrN7c2raHXq2-tFU7fLVomRAienX_I0KUFixoJ7a_g6zrp6jnj-icChRUM8rVlGucEpDKd/s1130/SMK%20BISA%20HEBAT.png",
     },
     {
       id: 6,
@@ -124,6 +136,8 @@ export default function Profile() {
       desc: "Kecamatan Jonggol memiliki beberapa MA yang berkualitas dan berkomitmen untuk memberikan pendidikan terbaik bagi siswanya",
       swasta: 10,
       negri: 5,
+      logoPendidikan:
+        "https://rekreartive.com/wp-content/uploads/2019/04/Logo-Madrasah-MI-Mts-dan-MA-Warna.png",
     },
     {
       id: 7,
@@ -132,6 +146,8 @@ export default function Profile() {
       desc: "Kecamatan Jonggol memiliki beberapa MTS yang berkualitas dan berkomitmen untuk memberikan pendidikan terbaik bagi siswanya",
       swasta: 10,
       negri: 5,
+      logoPendidikan:
+        "https://rekreartive.com/wp-content/uploads/2019/04/Logo-Madrasah-MI-Mts-dan-MA-Warna.png",
     },
     {
       id: 8,
@@ -140,17 +156,21 @@ export default function Profile() {
       desc: "Kecamatan Jonggol memiliki beberapa MI yang berkualitas dan berkomitmen untuk memberikan pendidikan terbaik bagi siswanya",
       swasta: 10,
       negri: 5,
+      logoPendidikan:
+        "https://rekreartive.com/wp-content/uploads/2019/04/Logo-Madrasah-MI-Mts-dan-MA-Warna.png",
     },
   ];
 
   const [agama, setAgama] = React.useState([]);
   const [loadAgama, setLoadAgama] = React.useState(true);
   const [agamaError, setAgamaError] = React.useState(false);
+  const [limitAgama, setLimitAgama] = React.useState(6);
+
   const [search, setSearch] = React.useState("");
 
   const getAgama = async () => {
     try {
-      await getApi(`sarana-keagamaan?${search !== "" && `key=${search}`}`).then(
+      await getApi(`sarana-keagamaan?${search !== "" && `key=${search}`}&${limit}`).then(
         (res) => {
           setAgama(res.data.data);
           setLoadAgama(false);
@@ -302,18 +322,25 @@ export default function Profile() {
               <></>
             ) : (
               <div className=" flex justify-center items-center">
-                <button
+                {/* <button
                   onClick={() => setLimit(limit + 12)}
                   onMouseEnter={handleMouseOver2}
                   onMouseLeave={handleMouseOut2}
                   className={` px-5 py-2 2xl:py-3 rounded-full lg:text-sm 2xl:text-base font-semibold mt-5 ${
                     hoverButton2
-                      ? "bg-[#2F872F] text-white transition-all border-2 border-[#2F872F]"
-                      : "border-white border-2  text-white transition-all"
+                      ? 'bg-[#2F872F] text-white transition-all border-2 border-[#2F872F]'
+                      : 'border-white border-2  text-white transition-all'
                   }`}
                 >
                   Selengkapnya
-                </button>
+                </button> */}
+                <AnimatedButton
+                  onClick={() => setLimit(limit + 12)}
+                  label={"Selengkapnya"}
+                  styleButton={
+                    "px-5 mt-5 py-1 rounded-full text-[15px] text-white border-2 border-white hover:text-black hover:border-kuningPrimary before:bg-bgKuningPrimary hover:text-black"
+                  }
+                />
               </div>
             )}
           </div>
@@ -379,7 +406,7 @@ export default function Profile() {
             >
               {!loadAgama ? (
                 agama.length != 0 ? (
-                  agama.map((i, key) => <CardIbadah key={key} />)
+                  agama.map((i, key) => <CardIbadah key={key} i={i} />)
                 ) : agamaError ? (
                   <>
                     <div className="flex flex-col justify-center items-center">
@@ -400,13 +427,40 @@ export default function Profile() {
                   </>
                 )
               ) : (
-                <></>
+                [1, 2, 3, 4, 5, 6, 7, 8].map((i, key) => <CardLoadingIbadah />)
               )}
             </div>
+            {agama.length < 12 ? (
+              <></>
+            ) : (
+              <AnimatedButton
+                onClick={() => setLimitAgama(limitAgama + 6)}
+                label={"Selengkapnya"}
+                styleButton={
+                  "px-5 mt-5 py-1 rounded-full text-[15px] text-white border-2 border-white hover:text-black hover:border-kuningPrimary before:bg-bgKuningPrimary hover:text-black"
+                }
+              />
+            )}
           </div>
           {/* content */}
         </div>
         {/* Keagamaan */}
+      </div>
+    </>
+  );
+}
+
+function CardLoadingIbadah(params) {
+  return (
+    <>
+      <div className="2xl:px-16 px-10 py-5 gap-y-3 rounded-2xl bg-white flex flex-col items-center">
+        <div className="uppercase px-7 py-3 font-bold bg-[#3C903C] text-white rounded-2xl text-xl animate-pulse">
+          <div className="w-20 h-5 bg-cover rounded-2xl bg-center bg-gray-300"></div>
+        </div>
+        <div className="flex flex-col h-full items-center animate-pulse w-1/2 gap-y-2">
+          <div className="w-1/2 h-5 bg-cover rounded-2xl bg-center bg-gray-300"></div>
+          <div className="w-1/3 h-5 bg-cover rounded-2xl bg-center bg-gray-300"></div>
+        </div>
       </div>
     </>
   );
@@ -439,15 +493,15 @@ function CardLoadingDesa(params) {
   );
 }
 
-function CardIbadah() {
+function CardIbadah({ i }) {
   return (
     <>
       <div className="2xl:px-16 px-10 py-5 gap-y-3 rounded-2xl bg-white flex flex-col items-center">
         <div className="uppercase px-7 py-3 font-bold bg-[#3C903C] text-white rounded-full text-xl">
-          Masjid
+          {i.nama_sarana.includes("Masjid") ? "Masjid" : "Gereja"}
         </div>
-        <h1 className="font-bold">Masjid Umar Bin Khottob</h1>
-        <h1 className="font-bold">Desa Suka Galih</h1>
+        <h1 className="font-bold">{i.nama_sarana}</h1>
+        <h1 className="font-bold">Desa {i.desa.nama_desa}</h1>
       </div>
     </>
   );
@@ -475,11 +529,11 @@ function Desa({ i }) {
   }, []);
   return (
     <>
-      <div className="2xl:px-16 px-10 py-10 rounded-2xl bg-white flex flex-col items-center">
+      <div className="2xl:px-16 px-10 py-10 mb-5 rounded-2xl bg-white flex flex-col items-center">
         <div className="uppercase px-7 py-3 font-bold bg-[#3C903C] text-white rounded-2xl text-xl">
           {i.nama_desa}
         </div>
-        <div className="flex  justify-between w-full mt-5 items-end">
+        <div className="flex justify-between w-full mt-5 items-end">
           <div>
             <h1 className="font-bold">Kepala Desa</h1>
             <h1 className="flex justify-start items-start">{i.kepala_desa}</h1>
@@ -488,7 +542,8 @@ function Desa({ i }) {
             <h1>Longtitude : {i.longtitude}</h1>
             <h1>Latitude : {i.latitude}</h1>
           </div> */}
-          <div
+
+          {/* <div
             onClick={() => {
               navigate(`desa/${i.slug}`);
             }}
@@ -496,9 +551,21 @@ function Desa({ i }) {
           >
             <h1>Selengkapnya</h1>
             <ArrowRight2 />
-          </div>
+          </div> */}
+          <UnderlineButton
+            onClick={() => {
+              navigate(`desa/${i.slug}`);
+            }}
+            label={"Selengkapnya..."}
+            styleP={"text-gray-300 text-[15px] before:text-hijauPrimary"}
+            styleSvg={
+              "text-transparent hover:text-hijauPrimary transform translate-x-4"
+            }
+            styleButton={"after:bg-hijauPrimary"}
+          />
         </div>
       </div>
+
       <div className="2xl:px-20 px-10 py-10 rounded-2xl bg-white flex flex-col items-center">
         <div className="uppercase px-7 py-3 font-bold bg-[#3C903C] text-white rounded-2xl text-xl">
           Potensi Desa
@@ -782,11 +849,11 @@ function CardSekolah({ i }) {
       <div
         onMouseEnter={handleMouseOver}
         onMouseLeave={handleMouseOut}
-        className={`card flex flex-col text-center items-center gap-y-5 bg-white  w-full 2xl:px-4 lg:px-3 px-4 pt-20 pb-10 rounded-[20px] cursor-pointer transition-all  ${
+        className={`card flex flex-col h-[100%] text-center items-center gap-y-5 bg-white  w-full 2xl:px-4 lg:px-3 px-5 py-[50px] rounded-[20px] cursor-default transition-all  ${
           isHovering && "-translate-y-1 -translate-x-1 shadow-xl transition-all"
         }`}
       >
-        <svg
+        {/* <svg
           xmlns="http://www.w3.org/2000/svg"
           className="w-20"
           viewBox="0 0 15 15"
@@ -796,7 +863,10 @@ function CardSekolah({ i }) {
             stroke="currentColor"
             d="m7.5 4.5l4 2v8h-8v-8l4-2Zm0 0V0M0 14.5h15m-13.5 0v-6h2m10 6v-6h-2m-5 6v-3h2v3m-1-14h3v2h-3m0 7a1 1 0 1 1 0-2a1 1 0 0 1 0 2Z"
           />
-        </svg>
+        </svg> */}
+        <div className="w-[150px] h-[150px] flex justify-center items-center mb-5">
+          <img src={i.logoPendidikan} alt="" className="w-[150px]" />
+        </div>
         <div className="title flex flex-col gap-y-2 items-center">
           <h1 className="font-bold text-lg">{i.nama}</h1>
           <h2>({i.initial})</h2>
@@ -814,14 +884,21 @@ function CardSekolah({ i }) {
           </div>
         </div>
         <div className="flex justify-center items-center">
-          <button
+          {/* <button
             onClick={() => navigate(`/sekolah/${i.nama}&${i.initial}`)}
             onMouseEnter={handleMouseOver2}
             onMouseLeave={handleMouseOut2}
             className={` px-5 py-2 2xl:py-3 rounded-full lg:text-sm 2xl:text-base font-semibold mt-5 bg-[#2F872F] text-white transition-all border-2 border-[#2F872F] `}
           >
             Selengkapnya
-          </button>
+          </button> */}
+          <AnimatedButton
+            onClick={() => navigate(`/sekolah/${i.nama}&${i.initial}`)}
+            label={"Selengkapnya"}
+            styleButton={
+              "px-5 py-1 mt-5 rounded-full hover:text-white text-hijauPrimary border-2 border-hijauPrimary before:bg-bgHijauPrimary"
+            }
+          />
         </div>
       </div>
     </>

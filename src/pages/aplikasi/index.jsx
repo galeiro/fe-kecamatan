@@ -1,24 +1,26 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import siapmasjo from "../../assets/logo/siapmasjo.png";
-import sipahadasi from "../../assets/logo/sipahadesi.png";
-import sipaojol from "../../assets/logo/sipaojol.png";
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import siapmasjo from '../../assets/logo/siapmasjo.png';
+import sipahadasi from '../../assets/logo/sipahadesi.png';
+import sipaojol from '../../assets/logo/sipaojol.png';
+import UnderlineButton from '../home/component/underlineButton';
+import UnderlineButton2 from '../home/component/underlineButton2';
 export default function Aplikasi() {
   const app = [
     {
       id: 1,
       url: siapmasjo,
-      desc: "Lorem ipsum dolor sit amet consectetur. Eget laoreet donec commodo placerat viverra scelerisque ut. Sed lorem diam nunc cursus arcu nulla sapien. Non tempor donec suspendisse suspendisse egestas urna adipiscing feugiat. Sit velit eleifend eleifend felis arcu nisi. Eu gravida ultricies amet ut pretium purus aliquam porta a. Duis consectetur donec auctor lorem metus.",
+      desc: 'Lorem ipsum dolor sit amet consectetur. Eget laoreet donec commodo placerat viverra scelerisque ut. Sed lorem diam nunc cursus arcu nulla sapien. Non tempor donec suspendisse suspendisse egestas urna adipiscing feugiat. Sit velit eleifend eleifend felis arcu nisi. Eu gravida ultricies amet ut pretium purus aliquam porta a. Duis consectetur donec auctor lorem metus.',
     },
     {
       id: 2,
       url: sipahadasi,
-      desc: "Lorem ipsum dolor sit amet consectetur. Eget laoreet donec commodo placerat viverra scelerisque ut. Sed lorem diam nunc cursus arcu nulla sapien. Non tempor donec suspendisse suspendisse egestas urna adipiscing feugiat. Sit velit eleifend eleifend felis arcu nisi. Eu gravida ultricies amet ut pretium purus aliquam porta a. Duis consectetur donec auctor lorem metus.",
+      desc: 'Lorem ipsum dolor sit amet consectetur. Eget laoreet donec commodo placerat viverra scelerisque ut. Sed lorem diam nunc cursus arcu nulla sapien. Non tempor donec suspendisse suspendisse egestas urna adipiscing feugiat. Sit velit eleifend eleifend felis arcu nisi. Eu gravida ultricies amet ut pretium purus aliquam porta a. Duis consectetur donec auctor lorem metus.',
     },
     {
       id: 3,
       url: sipaojol,
-      desc: "Lorem ipsum dolor sit amet consectetur. Eget laoreet donec commodo placerat viverra scelerisque ut. Sed lorem diam nunc cursus arcu nulla sapien. Non tempor donec suspendisse suspendisse egestas urna adipiscing feugiat. Sit velit eleifend eleifend felis arcu nisi. Eu gravida ultricies amet ut pretium purus aliquam porta a. Duis consectetur donec auctor lorem metus.",
+      desc: 'Lorem ipsum dolor sit amet consectetur. Eget laoreet donec commodo placerat viverra scelerisque ut. Sed lorem diam nunc cursus arcu nulla sapien. Non tempor donec suspendisse suspendisse egestas urna adipiscing feugiat. Sit velit eleifend eleifend felis arcu nisi. Eu gravida ultricies amet ut pretium purus aliquam porta a. Duis consectetur donec auctor lorem metus.',
     },
   ];
   return (
@@ -68,7 +70,16 @@ function CardApp({ data }) {
             {data.desc}
           </p>
           <div className="2xl:text-xl  justify-end font-bold 2xl:mb-10 mb-5 2xl:mr-10 mr-5  flex items-center ">
-            <p
+            <UnderlineButton2
+              onClick={() => navigate(`/aplikasi/${data.id}`)}
+              label={'Selengkapnya...'}
+              styleP={'text-white text-[20px] before:text-kuningPrimary'}
+              styleSvg={
+                'text-transparent hover:text-kuningPrimary transform translate-x-4'
+              }
+              styleButton={'after:bg-kuningPrimary'}
+            />
+            {/* <p
               onClick={() => {
                 navigate(`/aplikasi/${data.id}`);
               }}
@@ -81,7 +92,7 @@ function CardApp({ data }) {
               }`}
             >
               Selengkapnya...
-            </p>
+            </p> */}
           </div>
         </div>
       </div>

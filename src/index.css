@@ -1,10 +1,21 @@
+@import url(//db.onlinewebfonts.com/c/2f86dc938a55788d3416b876b43a116a?family=Poppins);
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+.underlineButton:hover svg {
+  @apply transform translate-x-4;
+  color: #2a9134;
+}
+.underlineButtonn:hover svg {
+  @apply transform translate-x-4;
+  color: #fff012;
+}
+
 *{
   margin: 0;
   padding: 0;
+  font-family: "Poppins";
 }
 
 html{
@@ -214,9 +225,54 @@ table tr:first-child th:last-child {
   opacity: 0.7;
 }
 
-/* scroll */
+.animated-image {
+  animation: moveUpDown 2s ease-in-out infinite;
+}
+.animated-image2 {
+  animation: moveUpDown2 2s ease-in-out infinite;
+}
+.animated-image3 {
+  animation: moveUpDown3 1.5s ease-in-out infinite;
+}
 
+@keyframes moveUpDown {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+@keyframes moveUpDown2 {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-20px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+@keyframes moveUpDown3 {
+  0% {
+    transform: translateX(0);
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateX(-20px);
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateX(0);
+    transform: translateY(0);
+  }
+}
 
+/* scrollbar */
 .scrollbar::-webkit-scrollbar {
   width: 15px;
   height: 20px;
@@ -224,15 +280,15 @@ table tr:first-child th:last-child {
 
 .scrollbar::-webkit-scrollbar-track {
   border-radius: 100vh;
-  background: #f7f4ed;
+  background: #ffffff00;
 }
 
 .scrollbar::-webkit-scrollbar-thumb {
-  background: #007100;
+  background: #2a9134;
   border-radius: 100vh;
   border: 3px solid #f6f7ed;
 }
 
 .scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #035703;
+  background: #1b6422;
 }

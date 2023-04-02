@@ -1,15 +1,17 @@
-import { ArrowRight3, ArrowLeft3 } from "iconsax-react";
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Scrollbar } from "swiper";
-import slide1 from "../../../assets/images/kevinmarcus.jpg";
-import slide2 from "../../../assets/images/save-rohingya.jpg";
-import slide3 from "../../../assets/images/sri-mulyani.jpg";
-import { Dialog, Transition } from "@headlessui/react";
-import { getApi } from "../../../API/restApi";
-import parse from "html-react-parser";
-import NoImage from "../../../assets/images/thumbnail.jpg";
+import { ArrowRight3, ArrowLeft3 } from 'iconsax-react';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Scrollbar } from 'swiper';
+import slide1 from '../../../assets/images/kevinmarcus.jpg';
+import slide2 from '../../../assets/images/save-rohingya.jpg';
+import slide3 from '../../../assets/images/sri-mulyani.jpg';
+import { Dialog, Transition } from '@headlessui/react';
+import { getApi } from '../../../API/restApi';
+import parse from 'html-react-parser';
+import NoImage from '../../../assets/images/thumbnail.jpg';
+import AnimatedButton from '../../../component/animatedButton';
+
 
 export default function Galeri() {
   const navigate = useNavigate();
@@ -29,7 +31,7 @@ export default function Galeri() {
   const [loadGaleri, setLoadGaleri] = React.useState(true);
   const getGaleri = async () => {
     try {
-      getApi("album").then((res) => {
+      getApi('album').then((res) => {
         setDataGaleri(res.data.data);
         setLoadGaleri(false);
       });
@@ -47,7 +49,7 @@ export default function Galeri() {
 
   return (
     <>
-      <div className="my-10 2xl:pl-16 lg:pl-10 lg:py-20 flex flex-col items-center justify-center bg-[#3C903C]">
+      <div className="mt-28 mb-10 2xl:pl-16 lg:pl-10 lg:pt-20 lg:pb-10 flex flex-col items-center justify-center bg-[#3C903C]">
         <div className="w-full  flex lg:flex-row flex-col lg:justify-between justify-center gap-x-10 mt-20 mb-20 items-center">
           <div className="kiri lg:px-0 px-8 lg:w-1/3 flex flex-col lg:items-start items-center lg:mb-0 mb-10 lg:gap-y-0 gap-y-5">
             <h1 className="text-6xl text-white font-semibold">Foto</h1>
@@ -57,25 +59,34 @@ export default function Galeri() {
               Earum tempora nemo a magnam iusto, sequi quo!
             </p>
 
-            <button
-              onClick={() => navigate("/foto")}
+            {/* <button
+              onClick={() => navigate('/foto')}
               onMouseEnter={handleMouseOver}
               onMouseLeave={handleMouseOut}
               className={`lg:flex hidden px-5 py-2 2xl:py-3 rounded-full lg:text-sm 2xl:text-base font-semibold mt-10 ${
                 hoverButton
-                  ? "bg-[#007100] text-white transition-all border-2 border-[#007100]"
-                  : "border-white border-2  text-white transition-all"
+                  ? 'bg-[#007100] text-white transition-all border-2 border-[#007100]'
+                  : 'border-white border-2  text-white transition-all'
               }`}
             >
               Selengkapnya
-            </button>
+            </button> */}
+            <div className='lg:block hidden'>
+              <AnimatedButton
+                onClick={() => navigate('/foto')}
+                label={'Selengkapnya'}
+                styleButton={
+                  'px-5 mt-5 py-1 rounded-full text-[15px] text-white border-2 border-white hover:text-black hover:border-kuningPrimary before:bg-bgKuningPrimary hover:text-black'
+                }
+              />
+            </div>
           </div>
           <div className="kanan lg:w-2/3 w-full">
             <Swiper
               spaceBetween={20}
               //   controller={{ control: firstSwiper }}
               scrollbar={{
-                el: ".swiper-scrollbar",
+                el: '.swiper-scrollbar',
                 draggable: true,
                 hide: false,
               }}
@@ -111,18 +122,13 @@ export default function Galeri() {
             </Swiper>
             <div className="swiper-scrollbar my-scrollbar mt-20 lg:flex !hidden"></div>
             <div className="lg:hidden flex justify-center">
-              <button
-                onClick={() => navigate("/foto")}
-                onMouseEnter={handleMouseOver}
-                onMouseLeave={handleMouseOut}
-                className={` px-5 py-2 2xl:py-3 rounded-full lg:text-sm 2xl:text-base font-semibold mt-16 ${
-                  hoverButton
-                    ? "bg-[#007100] text-white transition-all border-2 border-[#007100]"
-                    : "border-white border-2  text-white transition-all"
-                }`}
-              >
-                Selengkapnya
-              </button>
+              <AnimatedButton
+                onClick={() => navigate('/foto')}
+                label={'Selengkapnya'}
+                styleButton={
+                  'px-5 mt-5 py-1 rounded-full text-[15px] text-white border-2 border-white hover:text-black hover:border-kuningPrimary before:bg-bgKuningPrimary hover:text-black'
+                }
+              />
             </div>
           </div>
         </div>
@@ -169,31 +175,31 @@ function Modal({ open, setOpen, cancelButtonRef, foto }) {
   const data = [
     {
       id: 1,
-      img: "https://jonggolberkah.com/asset/img_galeri/84asemka2.jpg",
-      desc: "Seorang pedagang sedang membungkus souvenir penikahan yang akan dijual ataupun pesanan dari pelanggangnnya.",
-      place: "Desa Singasari",
-      createAt: "24 Desember 2022",
+      img: 'https://jonggolberkah.com/asset/img_galeri/84asemka2.jpg',
+      desc: 'Seorang pedagang sedang membungkus souvenir penikahan yang akan dijual ataupun pesanan dari pelanggangnnya.',
+      place: 'Desa Singasari',
+      createAt: '24 Desember 2022',
     },
     {
       id: 2,
-      img: "https://jonggolberkah.com/asset/img_galeri/84asemka2.jpg",
-      desc: "Seorang pedagang sedang membungkus souvenir penikahan yang akan dijual ataupun pesanan dari pelanggangnnya.",
-      place: "Desa Singasari",
-      createAt: "24 Desember 2022",
+      img: 'https://jonggolberkah.com/asset/img_galeri/84asemka2.jpg',
+      desc: 'Seorang pedagang sedang membungkus souvenir penikahan yang akan dijual ataupun pesanan dari pelanggangnnya.',
+      place: 'Desa Singasari',
+      createAt: '24 Desember 2022',
     },
     {
       id: 3,
-      img: "https://jonggolberkah.com/asset/img_galeri/84asemka2.jpg",
-      desc: "Seorang pedagang sedang membungkus souvenir penikahan yang akan dijual ataupun pesanan dari pelanggangnnya.",
-      place: "Desa Singasari",
-      createAt: "24 Desember 2022",
+      img: 'https://jonggolberkah.com/asset/img_galeri/84asemka2.jpg',
+      desc: 'Seorang pedagang sedang membungkus souvenir penikahan yang akan dijual ataupun pesanan dari pelanggangnnya.',
+      place: 'Desa Singasari',
+      createAt: '24 Desember 2022',
     },
     {
       id: 4,
-      img: "https://jonggolberkah.com/asset/img_galeri/84asemka2.jpg",
-      desc: "Seorang pedagang sedang membungkus souvenir penikahan yang akan dijual ataupun pesanan dari pelanggangnnya.",
-      place: "Desa Singasari",
-      createAt: "24 Desember 2022",
+      img: 'https://jonggolberkah.com/asset/img_galeri/84asemka2.jpg',
+      desc: 'Seorang pedagang sedang membungkus souvenir penikahan yang akan dijual ataupun pesanan dari pelanggangnnya.',
+      place: 'Desa Singasari',
+      createAt: '24 Desember 2022',
     },
   ];
 
@@ -331,18 +337,18 @@ function Modal({ open, setOpen, cancelButtonRef, foto }) {
 function CardModal({ img, tgl, nama, summary }) {
   const date = new Date(tgl);
   var months = [
-    "Januari",
-    "Februari",
-    "Maret",
-    "April",
-    "May",
-    "Juni",
-    "Juli",
-    "Agustus",
-    "September",
-    "Oktober",
-    "November",
-    "Desember",
+    'Januari',
+    'Februari',
+    'Maret',
+    'April',
+    'May',
+    'Juni',
+    'Juli',
+    'Agustus',
+    'September',
+    'Oktober',
+    'November',
+    'Desember',
   ];
   var monthName = months[date.getMonth()];
   return (
