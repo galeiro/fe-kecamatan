@@ -1,26 +1,36 @@
-import React from 'react';
-import Slider from './component/Slider';
-import siapmasjo from '../../assets/logo/siapmasjo.png';
-import sipahadasi from '../../assets/logo/sipahadesi.png';
-import sipaojol from '../../assets/logo/sipaojol.png';
-import Galeri from './component/Galeri';
-import { ArrowRight2, Calendar, Location } from 'iconsax-react';
-import CountUp from 'react-countup';
-import { getApi } from '../../API/restApi';
-import { useNavigate } from 'react-router-dom';
-import Lottie from 'lottie-react';
-import NotFound from '../../assets/json/93134-not-found.json';
-import ErrorIndicator from '../../assets/json/98642-error-404.json';
-import Potensi from './component/Potensi';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import {  Autoplay } from 'swiper';
-import 'swiper/css/effect-fade';
-import 'swiper/css';
-import UnderlineButton2 from './component/underlineButton2';
-import AnimatedButton from '../../component/animatedButton';
-import AnimatedButton2 from '../../component/animatedButton2';
-
-
+import React, { useEffect, useRef, useState } from "react";
+import Slider from "./component/Slider";
+import siapmasjo from "../../assets/logo/siapmasjo.png";
+import sipahadasi from "../../assets/logo/sipahadesi.png";
+import sipaojol from "../../assets/logo/sipaojol.png";
+import Galeri from "./component/Galeri";
+import {
+  ArrowCircleRight,
+  ArrowRight2,
+  Calendar,
+  Location,
+} from "iconsax-react";
+import CountUp from "react-countup";
+import { getApi } from "../../API/restApi";
+import { useNavigate } from "react-router-dom";
+import Lottie from "lottie-react";
+import NotFound from "../../assets/json/93134-not-found.json";
+import ErrorIndicator from "../../assets/json/98642-error-404.json";
+import Potensi from "./component/Potensi";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay } from "swiper";
+import "swiper/css/effect-fade";
+import "swiper/css";
+import UnderlineButton2 from "./component/underlineButton2";
+import AnimatedButton from "../../component/animatedButton";
+import AnimatedButton2 from "../../component/animatedButton2";
+import { useDispatch, useSelector } from "react-redux";
+import { changeState } from "../../redux/actions";
+import { useKeenSlider } from "keen-slider/react";
+import "keen-slider/keen-slider.min.css";
+import Agendacard from "./component/CardAgenda";
+import AgendaContent from "./component/AgendaContent";
+import AgendaForMobile from "./component/AgendaForMobile";
 export default function Home() {
   const navigate = useNavigate();
   const swiperRef = React.useRef();
@@ -28,9 +38,24 @@ export default function Home() {
   const [agendaError, setAgendaError] = React.useState(false);
   const [limit, setLimit] = React.useState(9);
   const [agenda, setAgenda] = React.useState([]);
+  const [agendaSidebar, setAgendaSidebar] = useState(false);
   const [loadAgenda, setLoadAgenda] = React.useState(true);
   const [penduduk, setPenduduk] = React.useState();
   const load = [1, 2, 3];
+  const [isSticky, setIsSticky] = useState(true);
+
+  const handleScroll = (e) => {
+    const scrollPosition = e.target.scrollTop;
+    const secondSectionTop =
+      document.querySelector("#second-section").offsetTop;
+    const isPastSecondSection = scrollPosition > secondSectionTop;
+
+    if (isPastSecondSection && isSticky) {
+      setIsSticky(false);
+    } else if (!isPastSecondSection && !isSticky) {
+      setIsSticky(true);
+    }
+  };
 
   const getAgenda = async () => {
     try {
@@ -122,7 +147,6 @@ export default function Home() {
     },
   ];
 
-
   const [hoverButton2, setHoverButton2] = React.useState(false);
   const handleMouseOver2 = () => {
     setHoverButton2(true);
@@ -138,7 +162,7 @@ export default function Home() {
   const [loadBerita, setLoadBerita] = React.useState(true);
   const getBerita = async () => {
     try {
-      await getApi('berita').then((val) => {
+      await getApi("berita").then((val) => {
         // console.log(val.data.data);
         setBerita(val.data.data);
         setLoadBerita(false);
@@ -148,6 +172,10 @@ export default function Home() {
       setLoadBerita(false);
       setBeritaError(true);
     }
+  };
+
+  const handleAgendaSidebar = () => {
+    return setAgendaSidebar(!agendaSidebar);
   };
 
   React.useEffect(() => {
@@ -162,7 +190,39 @@ export default function Home() {
     <>
       <div className=" lg:pt-[100px] pt-[80px] w-full">
         <Slider />
-        {/* 
+
+        <section className="" onScroll={handleScroll}>
+          <div
+            className={`z-50 ${
+              isSticky ? "sticky top-[100px]" : "relative"
+            } hidden lg:block`}
+          >
+            <div className="flex items-start absolute">
+              <div
+                className={`${
+                  agendaSidebar ? "ml-0" : "-ml-[350px]"
+                } bg-[#017002] drop-shadow-lg rounded-lg rounded-tr-none rounded-tl-none rounded-bl-none w-[350px] h-auto border border-black rounded-br-lg border-l-0 transition-all ease-in-out duration-700`}
+              >
+                <Agendacard />
+              </div>
+              <div
+                onClick={() => handleAgendaSidebar()}
+                className={` flex items-center transition-[0.3s] ease-in-out cursor-pointer duration-700`}
+              >
+                <div className="bg-[#017002] text-white w-[50px] h-[150px] z-10 flex border border-l-0 border-black rounded-tr-lg rounded-br-lg justify-center items-center">
+                  <p className="-rotate-90 text-center z-50">Agenda</p>
+                </div>
+                <div
+                  className={`${
+                    agendaSidebar ? "rotate-180" : "rotate-0"
+                  } bg-[#017002] rounded-full border border-black transition-all ease-in-out w-fit h-fit`}
+                >
+                  <ArrowCircleRight size="27" color="#ffffff" />
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* 
         <div className="mt-32 lg:flex hidden flex-row justify-between items-center 2xl:px-16 lg:px-10 px-8 mb-20 gap-x-96">
           <div className="left flex flex-col gap-y-20 2xl:w-1/3 lg:w-11/12">
             <h1 className="font-bold 2xl:text-6xl lg:text-5xl 2xl:w-3/4">
@@ -201,176 +261,66 @@ export default function Home() {
 
 
         {/* jumlah for dekstop */}
-        <div className="mt-20 mb-10 px-24 lg:flex hidden justify-center">
-          {/* <div className=" rounded-xl bg-white flex lg:px-5 lg:py-5 ">
+          <div className="mt-20 mb-10 px-24 lg:flex hidden justify-center">
+            {/* <div className=" rounded-xl bg-white flex lg:px-5 lg:py-5 ">
             {data.map((i, key) => (
               <CardInfo key={key} index={key} data={i} />
             ))}
           </div> */}
-          <div className="grid grid-cols-4 gap-x-5 w-full">
-            {data.map((i, key) => (
-              <CardInfo key={key} index={key} data={i} />
-            ))}
+            <div className="grid grid-cols-4 gap-x-5 w-full">
+              {data.map((i, key) => (
+                <CardInfo key={key} index={key} data={i} />
+              ))}
+            </div>
           </div>
-        </div>
 
-        {/* jumlah for dekstop */}
-        {/* jumlah for mobile */}
-        <div className="mt-10 mb-10 px-8 lg:hidden flex justify-center">
-          <div className="rounded-xl bg-white grid grid-cols-2">
-            {data.map((i, key) => (
-              <CardInfoMobile key={key} index={key} data={i} />
-            ))}
+          {/* jumlah for dekstop */}
+          {/* jumlah for mobile */}
+          <div className="mt-10 mb-10 px-8 lg:hidden flex justify-center">
+            <div className="rounded-xl bg-white grid grid-cols-2">
+              {data.map((i, key) => (
+                <CardInfoMobile key={key} index={key} data={i} />
+              ))}
+            </div>
           </div>
-        </div>
-        {/* jumlah for mobile */}
-        {/* Potensi Desa */}
-        <Potensi />
+          {/* jumlah for mobile */}
+          {/* Potensi Desa */}
+          <Potensi />
 
-        {/* Agenda */}
-        <div className="mt-28 mb-10 2xl:px-16 lg:px-10 px-8 flex flex-col items-center justify-center">
-          <h1 className="text-4xl font-bold capitalize underline decoration-[#3C903C]">
-            Agenda
-          </h1>
-          {/* agenda web */}
-          <div className="xl:block hidden w-full mt-10">
-            <Swiper
-              centeredSlides={true}
-              slidesPerView={3}
-              spaceBetween={40}
-              loop={true}
-              //   controller={{ control: firstSwiper }}
-              onSlideChange={handleSlideChange}
-              autoplay={{
-                delay: 3500,
-                disableOnInteraction: false,
-              }}
-              modules={[Autoplay]}
-              // onSwiper={(swiper) => {
-              //   setPageAgendaSlider(swiper.realIndex);
-              //   swiperRef.current = swiper;
-              // }}
-              className="rounded-b-3xl"
-              // effect={'fade'}
-            >
-              <div
-                className={` mb-20 gap-y-10 gap-x-10 mt-20 ${
-                  loadAgenda
-                    ? 'grid 2xl:grid-cols-3 lg:grid-cols-2 grid-cols-1'
-                    : agenda.length == 0 || agendaError
-                    ? ''
-                    : 'grid 2xl:grid-cols-3 lg:grid-cols-2 grid-cols-1'
-                }`}
-              >
-                {!loadAgenda ? (
-                  agenda.length != 0 ? (
-                    agenda.map((i, key) => (
-                      <SwiperSlide key={key}>
-                        <CardAgenda data={i} />
-                      </SwiperSlide>
-                    ))
-                  ) : agendaError ? (
-                    <>
-                      <div className="flex flex-col justify-center items-center">
-                        <Lottie animationData={ErrorIndicator} />
-                        <h1 className="font-bold">Terjadi Kesalahan</h1>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className="flex flex-col justify-center items-center">
-                        <Lottie animationData={NotFound} />
-                        <h1 className="font-bold">Agenda Tidak Tersedia</h1>
-                      </div>
-                    </>
-                  )
-                ) : (
-                  load.map((i, key) => <CardAgendaLoading key={key} />)
-                )}
+          {/* Agenda */}
+          <div className="lg:hidden mt-28 mb-10 2xl:px-16 lg:px-10 px-8 flex flex-col items-center justify-center">
+            <div className="w-full overflow-hidden  rounded-md">
+              <div className="flex flex-col gap-1 bg-green-700 px-5 pt-3 pb-4 text-white">
+                <h4 className="text-xl leading-8 font-bold">Agenda Kecamatan Jonggol</h4>{" "}
+                <p className="text-xs leading-5">
+                  Dapatkan informasi terkait semua kegiatan yang dilakukan di
+                  Kecamatan Jonggol.
+                </p>
               </div>
-            </Swiper>
+              <AgendaForMobile/>
+            </div>
           </div>
 
-          {/* agenda mobile */}
-          <div className="xl:hidden block w-full mt-10">
-            <Swiper
-              centeredSlides={true}
-              slidesPerView={1}
-              spaceBetween={40}
-              loop={true}
-              //   controller={{ control: firstSwiper }}
-              onSlideChange={handleSlideChange}
-              autoplay={{
-                delay: 3500,
-                disableOnInteraction: false,
-              }}
-              modules={[Autoplay]}
-              // onSwiper={(swiper) => {
-              //   setPageAgendaSlider(swiper.realIndex);
-              //   swiperRef.current = swiper;
-              // }}
-              className="rounded-b-3xl"
-              // effect={'fade'}
-            >
-              <div
-                className={` mb-20 gap-y-10 gap-x-10 mt-20 ${
-                  loadAgenda
-                    ? 'grid 2xl:grid-cols-3 lg:grid-cols-2 grid-cols-1'
-                    : agenda.length == 0 || agendaError
-                    ? ''
-                    : 'grid 2xl:grid-cols-3 lg:grid-cols-2 grid-cols-1'
-                }`}
-              >
-                {!loadAgenda ? (
-                  agenda.length != 0 ? (
-                    agenda.map((i, key) => (
-                      <SwiperSlide key={key}>
-                        <CardAgenda data={i} />
-                      </SwiperSlide>
-                    ))
-                  ) : agendaError ? (
-                    <>
-                      <div className="flex flex-col justify-center items-center">
-                        <Lottie animationData={ErrorIndicator} />
-                        <h1 className="font-bold">Terjadi Kesalahan</h1>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className="flex flex-col justify-center items-center">
-                        <Lottie animationData={NotFound} />
-                        <h1 className="font-bold">Agenda Tidak Tersedia</h1>
-                      </div>
-                    </>
-                  )
-                ) : (
-                  load.map((i, key) => <CardAgendaLoading key={key} />)
-                )}
-              </div>
-            </Swiper>
-          </div>
-        </div>
-
-        {/* program */}
-        <div className="mt-28 mb-10 2xl:px-16 lg:px-10 px-8 flex flex-col items-center justify-center">
-          <h1 className="text-4xl font-bold capitalize underline decoration-[#3C903C]">
-            Aplikasi Pemerintah
-          </h1>
-          <div className="grid lg:grid-cols-3 grid-cols-1 2xl:gap-x-24 lg:gap-x-10 gap-10 mt-16 mb-16 w-full justify-center h-full">
-            {/* box */}
-            {app.map((i, key) => (
-              <CardApp key={key} data={i} />
-            ))}
-            {/* box */}
-          </div>
-          <AnimatedButton
-            onClick={() => navigate('/aplikasi')}
-            label={'Lebih Banyak'}
-            styleButton={
-              'px-5 py-1 rounded-full hover:text-white text-hijauPrimary border-2 border-hijauPrimary before:bg-bgHijauPrimary'
-            }
-          />
-          {/* <div
+          {/* program */}
+          <div className="mt-28 mb-10 2xl:px-16 lg:px-10 px-8 flex flex-col items-center justify-center">
+            <h1 className="text-4xl font-bold capitalize underline decoration-[#3C903C]">
+              Aplikasi Pemerintah
+            </h1>
+            <div className="grid lg:grid-cols-3 grid-cols-1 2xl:gap-x-24 lg:gap-x-10 gap-10 mt-16 mb-16 w-full justify-center h-full">
+              {/* box */}
+              {app.map((i, key) => (
+                <CardApp key={key} data={i} />
+              ))}
+              {/* box */}
+            </div>
+            <AnimatedButton
+              onClick={() => navigate("/aplikasi")}
+              label={"Lebih Banyak"}
+              styleButton={
+                "px-5 py-1 rounded-full hover:text-white text-hijauPrimary border-2 border-hijauPrimary before:bg-bgHijauPrimary"
+              }
+            />
+            {/* <div
             onClick={() => navigate('/aplikasi')}
             onMouseEnter={handleMouseOver}
             onMouseLeave={handleMouseOut}
@@ -382,90 +332,96 @@ export default function Home() {
           >
             <p className="font-semibold ">Lebih Banyak</p>
           </div> */}
-        </div>
-        {/* program */}
-        {/* Gallery */}
-        <Galeri />
-        {/* Gallery */}
-        {/* Berita */}
-        <div className="mt-28 mb-28 flex flex-col items-center justify-center 2xl:px-16 lg:px-10 px-8">
-          {/* Title for dekstop */}
-          <div className="top lg:flex hidden justify-between items-center w-full">
-            <h1 className="font-bold 2xl:text-4xl lg:text-2xl">
-              Berita Terbaru
-            </h1>
-            <div
-              onClick={() => {
-                navigate("/berita");
-              }}
-              className={`flex items-center justify-center gap-x-2  cursor-pointer ${
-                hoverButton2
-                  ? "text-[#007100] transition-all -translate-x-1 -translate-y-1"
-                  : " text-[#6B7280] transition-all"
-              }`}
-              onMouseEnter={handleMouseOver2}
-              onMouseLeave={handleMouseOut2}
-            >
-              <h1 className="font-bold 2xl:text-xl lg:text-lg">More News</h1>
-              <ArrowRight2
-                size="22"
-                color={`${hoverButton2 ? "#547153" : "#6B7280"}`}
-              />
+          </div>
+          {/* program */}
+          {/* Gallery */}
+          <Galeri />
+          {/* Gallery */}
+        </section>
+
+        <section id="second-section">
+          {/* Berita */}
+          <div className="mt-28 mb-28 flex flex-col items-center justify-center 2xl:px-16 lg:px-10 px-8">
+            {/* Title for dekstop */}
+            <div className="top lg:flex hidden justify-between items-center w-full">
+              <h1 className="font-bold 2xl:text-4xl lg:text-2xl">
+                Berita Terbaru
+              </h1>
+              <div
+                onClick={() => {
+                  navigate("/berita");
+                }}
+                className={`flex items-center justify-center gap-x-2  cursor-pointer ${
+                  hoverButton2
+                    ? "text-[#007100] transition-all -translate-x-1 -translate-y-1"
+                    : " text-[#6B7280] transition-all"
+                }`}
+                onMouseEnter={handleMouseOver2}
+                onMouseLeave={handleMouseOut2}
+              >
+                <h1 className="font-bold 2xl:text-xl lg:text-lg">More News</h1>
+                <ArrowRight2
+                  size="22"
+                  color={`${hoverButton2 ? "#547153" : "#6B7280"}`}
+                />
+              </div>
             </div>
-          </div>
-          {/* Title for dekstop */}
-          {/* Title For Mobile */}
-          <div className="lg:hidden flex justify-center items-center">
-            <h1 className="font-bold text-2xl underline underline-[#547153]">
-              Berita Terbaru
-            </h1>
-          </div>
-          {/* Title For Mobile */}
-          <div
-            className={` content w-full 2xl:mt-20 mt-10   2xl:gap-x-16 lg:gap-x-4 lg:gap-y-0 gap-y-10 ${
-              loadBerita
-                ? "grid lg:grid-cols-4 grid-cols-1"
-                : berita.length == 0
-                ? ""
-                : "grid lg:grid-cols-4 grid-cols-1"
-            }`}
-          >
-            {loadBerita ? (
-              <>
-                <CardBeritaLoading />
-                <CardBeritaLoading />
-                <CardBeritaLoading />
-                <CardBeritaLoading />
-              </>
-            ) : berita.length != 0 ? (
-              berita.slice(0, 4).map((i, key) => <CardBerita key={key} i={i} />)
-            ) : beritaError ? (
-              <>
-                <div className="flex flex-col justify-center items-center">
-                  <Lottie animationData={ErrorIndicator} />
-                  <h1 className="font-bold">Terjadi Kesalahan</h1>
-                </div>
-              </>
-            ) : (
-              <>
-                <div className="flex flex-col justify-center items-center">
-                  <Lottie animationData={NotFound} />
-                  <h1 className="font-bold">Berita Tidak Tersedia</h1>
-                </div>
-              </>
-            )}
+            {/* Title for dekstop */}
+            {/* Title For Mobile */}
             <div className="lg:hidden flex justify-center items-center">
-            <AnimatedButton
-            onClick={() => navigate('/berita')}
-            label={'More News'}
-            styleButton={
-              'px-5 py-1 rounded-full hover:text-white text-hijauPrimary border-2 border-hijauPrimary before:bg-bgHijauPrimary'
-            }
-          />
+              <h1 className="font-bold text-2xl underline underline-[#547153]">
+                Berita Terbaru
+              </h1>
+            </div>
+            {/* Title For Mobile */}
+            <div
+              className={` content w-full 2xl:mt-20 mt-10   2xl:gap-x-16 lg:gap-x-4 lg:gap-y-0 gap-y-10 ${
+                loadBerita
+                  ? "grid lg:grid-cols-4 grid-cols-1"
+                  : berita.length == 0
+                  ? ""
+                  : "grid lg:grid-cols-4 grid-cols-1"
+              }`}
+            >
+              {loadBerita ? (
+                <>
+                  <CardBeritaLoading />
+                  <CardBeritaLoading />
+                  <CardBeritaLoading />
+                  <CardBeritaLoading />
+                </>
+              ) : berita.length != 0 ? (
+                berita
+                  .slice(0, 4)
+                  .map((i, key) => <CardBerita key={key} i={i} />)
+              ) : beritaError ? (
+                <>
+                  <div className="flex flex-col justify-center items-center">
+                    <Lottie animationData={ErrorIndicator} />
+                    <h1 className="font-bold">Terjadi Kesalahan</h1>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="flex flex-col justify-center items-center">
+                    <Lottie animationData={NotFound} />
+                    <h1 className="font-bold">Berita Tidak Tersedia</h1>
+                  </div>
+                </>
+              )}
+              <div className="lg:hidden flex justify-center items-center">
+                <AnimatedButton
+                  onClick={() => navigate("/berita")}
+                  label={"More News"}
+                  styleButton={
+                    "px-5 py-1 rounded-full hover:text-white text-hijauPrimary border-2 border-hijauPrimary before:bg-bgHijauPrimary"
+                  }
+                />
+              </div>
             </div>
           </div>
-        </div>
-        {/* Berita */}
+          {/* Berita */}
+        </section>
       </div>
     </>
   );
@@ -521,7 +477,7 @@ function CardInfo({ index, data }) {
 
         <div
           className={`${
-            isHovering ? 'absolute opacity-40' : 'opacity-0 absolute'
+            isHovering ? "absolute opacity-40" : "opacity-0 absolute"
           } top-10 -right-5 `}
         >
           <img
@@ -533,7 +489,7 @@ function CardInfo({ index, data }) {
         </div>
         <div
           className={`${
-            isHovering ? 'absolute opacity-40' : 'opacity-0 absolute'
+            isHovering ? "absolute opacity-40" : "opacity-0 absolute"
           } top-0 left-1 transition-all ease-in-out`}
         >
           <img
@@ -545,7 +501,7 @@ function CardInfo({ index, data }) {
         </div>
         <div
           className={`${
-            isHovering ? 'absolute opacity-40' : 'opacity-0 absolute'
+            isHovering ? "absolute opacity-40" : "opacity-0 absolute"
           } -bottom-5 left-5 transition-all ease-in-out `}
         >
           <img
@@ -557,7 +513,7 @@ function CardInfo({ index, data }) {
         </div>
         <div
           className={`${
-            isHovering ? 'absolute opacity-40' : 'opacity-0 absolute'
+            isHovering ? "absolute opacity-40" : "opacity-0 absolute"
           } -bottom-10 left-5 transition-all ease-in-out `}
         >
           <img
@@ -569,7 +525,7 @@ function CardInfo({ index, data }) {
         </div>
         <div
           className={`${
-            isHovering ? 'absolute opacity-40' : 'opacity-0 absolute'
+            isHovering ? "absolute opacity-40" : "opacity-0 absolute"
           } -bottom-6 right-5 transition-all ease-in-out rotate-45`}
         >
           <img
@@ -614,8 +570,6 @@ function CardInfoMobile({ data }) {
 }
 
 function CardApp({ data }) {
-
-
   const navigate = useNavigate();
   return (
     <>
@@ -633,12 +587,12 @@ function CardApp({ data }) {
           <div className="2xl:text-xl  justify-end font-bold 2xl:mb-10 mb-5 2xl:mr-10 mr-5  flex items-center ">
             <UnderlineButton2
               onClick={() => navigate(`/aplikasi/${data.id}`)}
-              label={'Selengkapnya...'}
-              styleP={'text-white text-[20px] before:text-kuningPrimary'}
+              label={"Selengkapnya..."}
+              styleP={"text-white text-[20px] before:text-kuningPrimary"}
               styleSvg={
-                'text-transparent hover:text-kuningPrimary transform translate-x-4'
+                "text-transparent hover:text-kuningPrimary transform translate-x-4"
               }
-              styleButton={'after:bg-kuningPrimary'}
+              styleButton={"after:bg-kuningPrimary"}
             />
             {/* <p
               onClick={() => navigate(`/aplikasi/${data.id}`)}
@@ -660,6 +614,19 @@ function CardApp({ data }) {
 }
 
 function CardBerita({ i }) {
+  const state = useSelector((state) => state.data);
+  const dispatch = useDispatch();
+  const [route, setRoute] = React.useState([]);
+  React.useEffect(() => {
+    dispatch(
+      changeState({
+        desa_id: state?.desa_id,
+        status: state?.status,
+        route: route,
+      })
+    );
+  }, [route.length]);
+  // console.log(route);
   const navigate = useNavigate();
   const date = new Date(i.createdAt);
   var months = [
@@ -683,9 +650,12 @@ function CardBerita({ i }) {
       <div
         title={i.judul}
         onClick={() => {
-          navigate(`/berita/${i.slug}`);
+          // setRoute(`/berita/${i.slug}`)
+          navigate(`/berita/${i.slug}`, {
+            state: { route: `/berita/${i.slug}` },
+          });
         }}
-        className="bg-[#f5f5fa] w-full 2xl:h-[350px] h-[300px]  rounded-3xl shadow-md cursor-pointer"
+        className="bg-[#f5f5fa] w-full 2xl:h-[350px] h-[300px] beritaHover rounded-3xl shadow-md cursor-pointer hover:border hover:border-hijauPrimary transition-all ease-in-out"
       >
         <div
           style={{ backgroundImage: `url(${i.thumbnail})` }}
@@ -709,13 +679,9 @@ function CardBerita({ i }) {
   );
 }
 
-
-function CardAgendaLoading({ key }) {
+function CardAgendaLoading() {
   return (
-    <div
-      key={key}
-      className="bg-[#3C903C] w-full h-80 flex flex-col rounded-2xl py-10 px-5 border-blue-300 animate-pulse"
-    >
+    <div className="bg-[#3C903C] w-full h-80 flex flex-col rounded-2xl py-10 px-5 border-blue-300 animate-pulse">
       <div className="flex justify-between flex-col h-full">
         <div>
           <div className="flex justify-between w-full">
@@ -740,29 +706,29 @@ function CardAgenda({ data }) {
   const navigate = useNavigate();
   const date = new Date(data.tanggal);
   var months = [
-    'Januari',
-    'Februari',
-    'Maret',
-    'April',
-    'May',
-    'Juni',
-    'Juli',
-    'Agustus',
-    'September',
-    'Oktober',
-    'November',
-    'Desember',
+    "Januari",
+    "Februari",
+    "Maret",
+    "April",
+    "May",
+    "Juni",
+    "Juli",
+    "Agustus",
+    "September",
+    "Oktober",
+    "November",
+    "Desember",
   ];
   var monthName = months[date.getMonth()];
 
-  const [hoursStart, minutesStart] = data.start.split(':');
+  const [hoursStart, minutesStart] = data.start.split(":");
   const formatedStart = `${hoursStart}:${minutesStart}`;
-  const [hoursEnd, minutesEnd] = data.end.split(':');
+  const [hoursEnd, minutesEnd] = data.end.split(":");
   const formatedEnd = `${hoursEnd}:${minutesEnd}`;
 
   return (
     <>
-      <div className="2xl:h-[350px] my-5 lg:h-[350px] h-[300px] w-full bg-white rounded-2xl px-6 py-5 shadow-xl">
+      <div className="agendaHover hover:border hover:border-hijauPrimary transition-all ease-in-out 2xl:h-[350px] my-5 lg:h-[350px] h-[300px] w-full bg-white rounded-2xl px-6 py-5 shadow-xl">
         {/* top */}
         <div className="flex justify-between w-full  items-center mb-8">
           <p className="font-bold">
@@ -790,10 +756,10 @@ function CardAgenda({ data }) {
               onClick={() => {
                 navigate(`/agenda/${data.slug}`);
               }}
-              label={'Detail'}
-              styleButton={'bg-hijauPrimary after:bg-kuningPrimary rounded-xl'}
+              label={"Detail"}
+              styleButton={"bg-hijauPrimary after:bg-kuningPrimary rounded-xl"}
               styleP={
-                'px-8 py-4 text-white text-[18px] tracking-wider hover:text-black'
+                "px-8 py-4 text-white text-[18px] tracking-wider hover:text-black"
               }
             />
 
